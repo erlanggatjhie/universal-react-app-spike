@@ -1,31 +1,29 @@
 import React, {Component, PropTypes} from 'react';
-import {
-  StaticRouter,
-} from 'react-router';
 
-import ApplicationRouter from '../../shared/ApplicationRouter';
+import {readFileSync} from 'fs';
+
+const manifestPath = './build/manifest.json';
+const assetManifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
 
 class ApplicationLayout extends Component {
+
   render() {
     return (
-      <StaticRouter context={{}} location={this.props.location}>
-        <html>
-        <head>
-          <title>Hello World</title>
-        </head>
-        <body>
-          <div id="app">
-            <ApplicationRouter />
-          </div>
-        </body>
-        </html>
-      </StaticRouter>
+      <html>
+      <head>
+        <title>Hello World</title>
+      </head>
+      <body>
+        <div id="app" dangerouslySetInnerHTML={{__html: this.props.mainComponent}}></div>
+        <script src={assetManifest.main.js}></script>
+      </body>
+      </html>
     )
   }
 }
 
 ApplicationLayout.propTypes = {
-  location: PropTypes.string.isRequired
+  mainComponent: PropTypes.string.isRequired,
 };
 
 export default ApplicationLayout;
